@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head><title>Getting Started with Python-InsightToolkit | PaulNovo.org</title>
+
+
+
+  
+  <meta name="author" content="Chris Herberte http://www.xweb.com.au">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="shortcut icon" href="http://paulnovo.org/misc/favicon.ico" type="image/x-icon">
+  <style type="text/css" media="all">@import "/modules/node/node.css";</style>
+<style type="text/css" media="all">@import "/modules/system/defaults.css";</style>
+<style type="text/css" media="all">@import "/modules/system/system.css";</style>
+<style type="text/css" media="all">@import "/modules/user/user.css";</style>
+<style type="text/css" media="all">@import "/modules/comment/comment.css";</style>
+<style type="text/css" media="all">@import "/themes/Aeon5/style.css";</style>
+    <script type="text/javascript"> </script></head><body>
+  <div id="container">
+    <div id="headerwraper">
+      <div id="header">
+
+        <div id="headerleft">
+                    <span id="sitename"><a href="http://paulnovo.org/" title="Home">PaulNovo.org</a></span>          <span id="slogan">paul novotny's internet home</span>        </div>
+
+        <div id="headerright">
+          <span id="primarylinks"><ul class="links"><li class="first menu-1-1-2"><a href="http://paulnovo.org/" class="menu-1-1-2">Tips &amp; HowTos</a></li>
+<li class="menu-1-2-2"><a href="http://paulnovo.org/publications" class="menu-1-2-2">Publications</a></li>
+<li class="menu-1-3-2"><a href="http://paulnovo.org/contact" class="menu-1-3-2">Contact Info</a></li>
+<li class="last menu-1-4-2"><a href="http://paulnovo.org/user/login" class="menu-1-4-2">Login</a></li>
+</ul></span>        </div>
+
+      </div>
+    </div>
+
+    <div id="main">
+      <div id="sidebar">
+		    <div id="block-menu-2" class="block block-menu">
+
+  <h2>Primary links</h2>
+
+  <div class="content">
+<ul class="menu">
+<li class="leaf"><a href="http://paulnovo.org/">Tips &amp; HowTos</a></li>
+<li class="leaf"><a href="http://paulnovo.org/publications">Publications</a></li>
+<li class="leaf"><a href="http://paulnovo.org/contact">Contact Info</a></li>
+<li class="leaf"><a href="http://paulnovo.org/user/login">Login</a></li>
+
+</ul>
+</div>
+</div>
+					      </div>
+
+      <div id="contentwraper">
+        <div id="content">       
+                    <h2 class="title">Getting Started with Python-InsightToolkit</h2>
+          <div class="breadcrumb"><a href="http://paulnovo.org/">Home</a></div> 
+                              
+<div class="node">
+	    		
+	
+	<div class="content">
+		<p>This short tutorial will get you started using the <a href="http://www.itk.org/">Insight Toolkit (ITK)</a> with Python in Ununtu. We will explore basic file reading, image processing, and volume rendering. It is an introduction, the <a href="http://www.itk.org/ItkSoftwareGuide.pdf">ITK Software Guide</a> and <a href="http://docs.python.org/tut/">Python Tutorial</a> contain more in depth information.</p>
+<h3>Basics</h3>
+<p>This tutorial requires installation of the packages as described in my previous <a href="http://paulnovo.org/node/2">tutorial</a>. Also, a few other packages are needed.</p>
+<p><code>sudo apt-get install python-scipy insighttoolkit-examples</code></p>
+<p>Insighttoolkit-examples contains images we are going to use in this demo. Uncompress the image first.</p>
+<p><code>sudo gunzip /usr/share/doc/insighttoolkit-examples/examples/Data/BrainProtonDensity3Slices.raw.gz</code></p>
+<p>I prefer to use IPython instead of python for the command line.
+IPython gives nice features like auto-completion, text coloring, and
+debugging. It's great.</p>
+<p><code>sudo apt-get install ipython<br>
+ipython</code></p>
+<p>Alright, we are ready to start using python. All the following code
+samples are typed into the IPython command line. Begin by importing the
+ITK module.</p>
+<p><code>import itk</code></p>
+<p>ITK is a heavily templated system. As a result, everything requires
+an image type. For example, a three dimensional image of type unsigned
+char is defined by</p>
+<p><code>image_type = itk.Image[itk.UC, 3]</code></p>
+<p>A large combination of image types are available, in fact ITK puts
+no restriction of data types and image dimensions. Unfortunately, this
+template system doesn't translate into python. I had to compromise and
+include a sub-set of dimensions and data-types. If you need more
+functionality, let me know and I can add it to subsequent versions of
+python-insighttoolkit. The following data-types for 2, 3, and 4
+dimensional images are included</p>
+<ul>
+<li>unsigned char</li>
+<li>unsigned short</li>
+<li>RGB unsigned short</li>
+<li>float</li>
+<li>complex float</li>
+<li>vector float</li>
+<li>covariant vector float</li>
+</ul>
+<h3>Reading and Writing Files</h3>
+<p>How do we read files? Just enter</p>
+<p><code>file_name = '/usr/share/doc/insighttoolkit-examples/examples/Data/BrainProtonDensity3Slices.mha'<br>
+reader = itk.ImageFileReader[image_type].New()<br>
+reader.SetFileName( file_name )<br>
+reader.Update()</code></p>
+<p>That's it. See how the reader required an image_type. This is
+slightly restrictive because you need to know the dimensionality and
+data type of the image before you read it. But not so bad.</p>
+<p>These four short lines of code will read TIFF, JPEG, PNG, BMP,
+DICOM, GIPL, Bio-Rad, LSM, Nifti, Analyze, SDT/SPR (Stimulate), Nearly
+Raw Raster Data (Nrrd), and VTK images. I don't know what half of those
+file formats are, but someone will find them useful.</p>
+<h3>Simple Image Processing Example</h3>
+<p>Alright, an image is loaded into memory and ready to go. We'll start with a simple example, a median filter.</p>
+<p><code>median_filter = itk.MedianImageFilter[image_type, image_type].New()</code></p>
+<p>Notice that image_type is used not once, but twice. The first and
+second image type refer to the input and output type, respectively. One
+image type definition was necessary for the reader above, because there
+is only an output image type. Filters require an input and output type.</p>
+<p>Filters often expose parameters to adjust their function. For
+example, setting the radius to 1 specifies the median filter will
+operate on 3x3x3 neighborhoods.</p>
+<p><code>median_filter.SetRadius( 1 )</code></p>
+<p>Set the filter input to the output of the reader and update.</p>
+<p><code>median_filter.SetInput( reader.GetOutput() )<br>
+median_filter.Update()</code></p>
+<p>Remember earlier when we called reader.Update(). Well, this isn't
+necessary. When median_filter.Update() is called, ITK will look at its
+input, and if necessary update it. If you put together a long string of
+filters, an update on the final filter will cascade all the way back to
+the beginning and update everything. Of course ITK is even smarter than
+this and will only rerun filters if its parameters or input has changed.</p>
+<p>There are many more operations you can perform on your images, but we need to move on.</p>
+<h3>ITK and VTK</h3>
+<p>ITK is great for reading, writing, and processing images. However, ITK is not equipped for visualization. This is where the <a href="http://www.vtk.org/">Visualization Toolkit (VTK)</a>
+comes in. Fortunately, ITK and VTK were created by some of the same
+people, so the concepts are very similar. In addition, connecting ITK
+and VTK is trivial with the python-insighttoolkit-extras package.</p>
+<p><code>itk_vtk_converter = itk.ImageToVTKImageFilter[image_type].New()<br>
+itk_vtk_converter.SetInput( median_filter.GetOutput() )<br>
+itk_vtk_converter.Update()</code></p>
+<p>Now itk_vtk_converter.GetOutput() returns VTK data. Very handy, especially if you want to render the volume.</p>
+<h3>Volume Rendering with VTK</h3>
+<p>This section is a quick introduction to volume rendering with VTK.
+It is low on details because there are better introductions to VTK and
+python already available.</p>
+<p>First we need to import VTK.</p>
+<p><code>import vtk</code></p>
+<p>A volume mapper determines how image data is rendered to the screen.
+In this case we use a high quality ray casting mapper. Depending on
+your video card, you can use the higher performance
+vtk.vtkVolumeTextureMapper3D() or vtk.vtkVolumeTextureMapper2D()
+mappers.</p>
+<p><code>volume_mapper = vtk.vtkVolumeRayCastMapper()<br>
+volume_mapper.SetInput( itk_vtk_converter.GetOutput() )</code></p>
+<p>The Ray Cast Mapper requires a composite function.</p>
+<p><code>composite_function = vtk.vtkVolumeRayCastCompositeFunction()<br>
+volume_mapper.SetVolumeRayCastFunction( composite_function )</code></p>
+<p>Our input image is 8 bit data with values from 0 to 255. A mapping
+is required between these values and the displayed color. For instance,
+the following code will map the image intensity to the blue channel.
+This is a linear function; 0 will map to black (0.0, 0.0, 0.0) and 255
+will map to solid blue (0.0, 0.0, 1.0). Everything in between will be a
+linear interpolation between the two end points, i.e. 127 will map to
+dark blue (0.0, 0.0, 0.5).</p>
+<p><code>color_transfer_func = vtk.vtkColorTransferFunction()<br>
+color_transfer_func.AddRGBPoint( 0, 0.0, 0.0, 0.0 )<br>
+color_transfer_func.AddRGBPoint( 255, 0.0, 0.0, 1.0 )</code></p>
+<p>Each voxel in the input image must also map to opacity. The
+following maps image intensities of 0 to completely transparent (0.0),
+and 255 to completely opaque (1.0). Again, values between 0 and 1 are
+interpolated.</p>
+<p><code>opacity_transfer_func = vtk.vtkPiecewiseFunction()<br>
+opacity_transfer_func.AddPoint( 0, 0.0 )<br>
+opacity_transfer_func.AddPoint( 255, 1.0 )</code></p>
+<p>Encapsulate the above properties in a vtkVolumeProperty.</p>
+<p><code>volume_properties = vtk.vtkVolumeProperty()<br>
+volume_properties.SetColor( color_transfer_func )<br>
+volume_properties.SetScalarOpacity( opacity_transfer_func )</code></p>
+<p>If you are familiar with VTK, a VTK volume is similar to a VTK
+actor. It encapsulates the data, properties, and rendering method for
+one 'object' in the scene.</p>
+<p><code>volume = vtk.vtkVolume()<br>
+volume.SetMapper( volume_mapper )<br>
+volume.SetProperty( volume_properties )</code></p>
+<p>Now lets create a few objects used for rendering.</p>
+<p><code>renderer = vtk.vtkRenderer()<br>
+render_window = vtk.vtkRenderWindow()<br>
+window_interactor = vtk.vtkRenderWindowInteractor()<br>
+</code></p>
+<p>The renderer handles the volume rendering, the render window is
+where the rendered volume will appear, and the window interactor
+handles user input to adjust the viewpoint (zoom, rotate, move, etc).
+Hook 'em up, and add our volume.</p>
+<p><code>render_window.AddRenderer( renderer )<br>
+window_interactor.SetRenderWindow( render_window )<br>
+renderer.AddVolume( volume )</code></p>
+<p>Just render the scene and start the window interactor so you can rotate the volume with your mouse.</p>
+<p><code>render_window.Render()<br>
+window_interactor.Start()</code></p>
+<p>To stop the interactor hit 'q'.</p>
+<h3>Numpy and ITK</h3>
+<p>Working with images with ITK is great, but when working in python,
+you want all the functionality of python. Fortunately, converting ITK
+images to python arrays is simple with the python-insighttoolkit-extras
+package.</p>
+<p><code>itk_py_converter = itk.PyBuffer[image_type]<br>
+image_array = itk_py_converter.GetArrayFromImage( reader.GetOutput() )</code></p>
+<p>How about converting a 10x10x10 python array to an ITK image.</p>
+<p><code>import scipy<br>
+another_image_array = scipy.zeros( (10,10,10) )<br>
+itk_image = itk_py_converter.GetImageFromArray( another_image_array )</code></p>
+<p>Does it get any easier?</p>
+	</div>
+	
+			<span class="submitted">
+			by paul		</span>
+		<div class="clear"></div>
+
+			<div class="info">
+			<ul class="links inline"><li class="first last comment_add"><a href="http://paulnovo.org/comment/reply/3#comment-form" title="Share your thoughts and opinions related to this posting." class="comment_add">Add new comment</a></li>
+</ul>		</div>
+    	
+</div><div id="comments"><a id="comment-5"></a>
+<div class="comment"> 
+  <p class="header">
+        </p><div class="comment-title">
+      <a href="http://paulnovo.org/node/3#comment-5" class="active">terrific! his sure does</a>    </div>
+     
+  <div class="comment-content">
+	  <p>terrific! his sure does justice to the excellent WrapITK project!</p>
+	</div> 
+    <div class="comment-author">
+      Anonymous | Sun, 03/23/2008 - 11:00    </div>
+  <div id="comment-links">
+    <ul class="links"><li class="first last comment_reply"><a href="http://paulnovo.org/comment/reply/3/5" class="comment_reply">reply</a></li>
+</ul>  </div> 
+</div><a id="comment-4"></a>
+<div class="comment"> 
+  <p class="header">
+        </p><div class="comment-title">
+      <a href="http://paulnovo.org/node/3#comment-4" class="active">Thanks Paul!</a>    </div>
+     
+  <div class="comment-content">
+	  <p>Thanks Paul. It is really a time saver, the Ubuntu repository.<br>
+I'm working on a thesis in Spain about MRI images processing. Just
+starting, I'd been thinking about working in C++ because I know it. But
+I think I should learn python, to code faster my experiments.<br>
+Will keep in touch.</p>
+<p>Regards.</p>
+<p><a href="http://alexsavio.blogspot.com/">http://alexsavio.blogspot.com</a></p>
+	</div> 
+    <div class="comment-author">
+      Anonymous | Wed, 03/12/2008 - 05:18    </div>
+  <div id="comment-links">
+    <ul class="links"><li class="first last comment_reply"><a href="http://paulnovo.org/comment/reply/3/4" class="comment_reply">reply</a></li>
+</ul>  </div> 
+</div><a id="comment-3"></a>
+<div class="comment"> 
+  <p class="header">
+        </p><div class="comment-title">
+      <a href="http://paulnovo.org/node/3#comment-3" class="active">Very nice</a>    </div>
+     
+  <div class="comment-content">
+	  <p>Thanks, Paul. These are great! My think my next big programming project will be in python now...</p>
+	</div> 
+    <div class="comment-author">
+      Anonymous | Tue, 03/11/2008 - 09:50    </div>
+  <div id="comment-links">
+    <ul class="links"><li class="first last comment_reply"><a href="http://paulnovo.org/comment/reply/3/3" class="comment_reply">reply</a></li>
+</ul>  </div> 
+</div></div> 
+                  </div>
+      </div>
+      <div class="clear"></div>
+    </div>
+
+    <div id="footerwraper">
+      <div id="footer">
+        
+                <span id="designby">
+          © 2008 PaulNovo.org : Design by <a href="http://www.xweb.com.au/">Chris Herberte</a>
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+</body></html>

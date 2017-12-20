@@ -1,0 +1,67 @@
+(dp0
+S'color'
+p1
+(F0.25490196078431371
+F0.59607843137254901
+F0.61176470588235299
+tp2
+sS'opacity'
+p3
+F0.5
+s.(dp4
+S'tube color'
+p5
+(F0.87450980392156863
+F0.96862745098039216
+F0.23529411764705882
+tp6
+sS'tube radius'
+p7
+F0.050000000000000003
+s.(dp8
+g5
+(F1.0
+F0.20000000000000001
+F0.20000000000000001
+tp9
+sg7
+F0.050000000000000003
+s.(dp10
+S'plane visible'
+p11
+I00
+sS'plane opacity'
+p12
+F1.0
+sS'grid visible'
+p13
+I01
+sS'plane resolution'
+p14
+I10
+sS'plane color'
+p15
+(F0.20000000000000001
+F0.20000000000000001
+F0.20000000000000001
+tp16
+sS'grid color'
+p17
+(F0.10000000000000001
+F0.10000000000000001
+F0.10000000000000001
+tp18
+sS'grid thickness'
+p19
+F0.02
+sS'grid opacity'
+p20
+F0.25
+s.(dp21
+S'right tube up'
+p22
+I01
+sS'left tube up'
+p23
+I01
+s.
